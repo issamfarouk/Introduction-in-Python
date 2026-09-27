@@ -21,6 +21,28 @@ class Transaction:
         self.amount = amount
         self.category = category
 
+    @property
+    def is_income(self) -> bool:
+        """True if money came in (positive amount)."""
+        return self.amount > 0
+
+    @property
+    def is_expense(self) -> bool:
+        """True if money went out (negative amount)."""
+        return self.amount < 0
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Transaction):
+            return NotImplemented
+        return (
+            self.date == other.date
+            and self.description == other.description
+            and self.amount == other.amount
+        )
+
+    def __lt__(self, other: "Transaction") -> bool:
+        return self.date < other.date
+
     def __repr__(self) -> str:
         return (
             f"Transaction({self.date!r}, {self.description!r}, "

@@ -22,13 +22,13 @@ def savings_rate_tip(account: Account) -> str | None:
         return None
     rate = (account.total_income + account.total_expenses) / account.total_income
     if rate < 0:
-        return f"⚠️ You spend more than you earn: {-rate:.0%} over your income."
+        return f"[Warning] You spend more than you earn: {-rate:.0%} over your income."
     if rate < GOOD_SAVINGS_RATE:
         return (
-            f"📉 You save {rate:.0%} of your income. "
+            f"[Warning] You save {rate:.0%} of your income. "
             f"Try to reach {GOOD_SAVINGS_RATE:.0%}."
         )
-    return f"✅ Great job! You save {rate:.0%} of your income."
+    return f"[Good]    Great job! You save {rate:.0%} of your income."
 
 
 def housing_tip(account: Account) -> str | None:
@@ -38,7 +38,7 @@ def housing_tip(account: Account) -> str | None:
     share = housing / account.total_income
     if share > MAX_HOUSING_SHARE:
         return (
-            f"🏠 Housing takes {share:.0%} of your income "
+            f"[Warning] Housing takes {share:.0%} of your income "
             f"(recommended: under {MAX_HOUSING_SHARE:.0%})."
         )
     return None
@@ -55,7 +55,7 @@ def subscriptions_tip(account: Account) -> str | None:
     yearly = -sum(payment.yearly_amount for payment in subscriptions)
     names = ", ".join(payment.description for payment in subscriptions)
     return (
-        f"🔁 You have {len(subscriptions)} recurring payments ({names}) "
+        f"[Tip]     You have {len(subscriptions)} recurring payments ({names}) "
         f"costing {yearly:,.2f} € per year. Cancel the ones you don't use."
     )
 
@@ -70,7 +70,7 @@ def flexible_spending_tip(account: Account) -> str | None:
     per_month = flexible[category] / months
     saving = flexible[category] / months * 12 * 0.25
     return (
-        f"🛍️ You spend {per_month:,.2f} € per month on {category}. "
+        f"[Tip]     You spend {per_month:,.2f} € per month on {category}. "
         f"Cutting it by a quarter would save {saving:,.2f} € per year."
     )
 
@@ -81,7 +81,7 @@ def worst_month_tip(account: Account) -> str | None:
         return None
     worst = summary["net"].idxmin()
     return (
-        f"🔎 {worst} was your weakest month: you saved only "
+        f"[Info]    {worst} was your weakest month: you saved only "
         f"{summary.loc[worst, 'net']:,.2f} €. Check what happened there."
     )
 
@@ -96,10 +96,10 @@ def emergency_fund_tip(account: Account) -> str | None:
     covered = account.balance / monthly_expenses
     if covered < EMERGENCY_MONTHS:
         return (
-            f"🛟 Your balance covers only {covered:.1f} months of expenses. "
+            f"[Warning] Your balance covers only {covered:.1f} months of expenses. "
             f"Aim for at least {EMERGENCY_MONTHS} months."
         )
-    return f"🛟 Your balance covers {covered:.1f} months of expenses. Nice safety net!"
+    return f"[Good]    Your balance covers {covered:.1f} months of expenses. Nice safety net!"
 
 
 def forecast_tip(account: Account, months: int = 6) -> str | None:
@@ -110,11 +110,11 @@ def forecast_tip(account: Account, months: int = 6) -> str | None:
     future = forecast_balance(account, months)
     if slope < 0:
         return (
-            f"🔮 Your balance shrinks by {-slope:,.2f} € per month. "
+            f"[Warning] Your balance shrinks by {-slope:,.2f} € per month. "
             f"In {months} months it could be {future.iloc[-1]:,.2f} €."
         )
     return (
-        f"🔮 Your balance grows by {slope:,.2f} € per month. "
+        f"[Info]    Your balance grows by {slope:,.2f} € per month. "
         f"In {months} months you could have {future.iloc[-1]:,.2f} €."
     )
 

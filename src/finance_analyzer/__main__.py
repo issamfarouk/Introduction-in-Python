@@ -23,7 +23,7 @@ def run_report(args: argparse.Namespace) -> None:
     report_path = args.output / "report.txt"
     report_path.write_text(report + "\n", encoding="utf-8")
 
-    print("\n📁 Saved files:")
+    print("\nSaved files:")
     print(f"   {report_path}")
     if len(account) > 0 and len(account.monthly_summary()) >= 2:
         for path in save_all_plots(account, args.output):
@@ -46,21 +46,41 @@ def build_parser() -> argparse.ArgumentParser:
 
     report = commands.add_parser("report", help="analyze a bank statement CSV file")
     report.add_argument("file", type=Path, help="bank statement CSV file")
-    report.add_argument("--balance", type=float, default=0.0,
-                        help="account balance before the first transaction (default: 0)")
-    report.add_argument("--months", type=int, default=6,
-                        help="how many months to forecast (default: 6)")
-    report.add_argument("--output", type=Path, default=Path("output"),
-                        help="folder for the report and charts (default: output)")
+    report.add_argument(
+        "--balance",
+        type=float,
+        default=0.0,
+        help="account balance before the first transaction (default: 0)",
+    )
+    report.add_argument(
+        "--months", type=int, default=6, help="how many months to forecast (default: 6)"
+    )
+    report.add_argument(
+        "--output",
+        type=Path,
+        default=Path("output"),
+        help="folder for the report and charts (default: output)",
+    )
     report.set_defaults(func=run_report)
 
-    generate = commands.add_parser("generate", help="create a CSV file with fake transactions")
-    generate.add_argument("--output", type=Path, default=Path("data/sample_transactions.csv"),
-                          help="where to save the file (default: data/sample_transactions.csv)")
-    generate.add_argument("--months", type=int, default=12,
-                          help="how many months of data (default: 12)")
-    generate.add_argument("--seed", type=int, default=42,
-                          help="random seed; the same seed gives the same data (default: 42)")
+    generate = commands.add_parser(
+        "generate", help="create a CSV file with fake transactions"
+    )
+    generate.add_argument(
+        "--output",
+        type=Path,
+        default=Path("data/sample_transactions.csv"),
+        help="where to save the file (default: data/sample_transactions.csv)",
+    )
+    generate.add_argument(
+        "--months", type=int, default=12, help="how many months of data (default: 12)"
+    )
+    generate.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="random seed; the same seed gives the same data (default: 42)",
+    )
     generate.set_defaults(func=run_generate)
 
     return parser

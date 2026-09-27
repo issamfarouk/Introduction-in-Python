@@ -14,9 +14,11 @@ def _euro(value: float) -> str:
     return f"{value:,.2f} €"
 
 
-def build_report(account: Account, name: str = "Account", forecast_months: int = 6) -> str:
+def build_report(
+    account: Account, name: str = "Account", forecast_months: int = 6
+) -> str:
     """Return the full report as one string (ready to print or save)."""
-    lines = [f"💰 Finance report: {name}", "=" * 40]
+    lines = [f"Finance report: {name}", "=" * 40]
 
     if len(account) == 0:
         lines.append("No transactions found.")
@@ -31,28 +33,28 @@ def build_report(account: Account, name: str = "Account", forecast_months: int =
         f"Final balance:    {_euro(account.balance)}",
     ]
 
-    lines.append(_heading("📅 Monthly summary"))
+    lines.append(_heading("Monthly summary"))
     lines.append(account.monthly_summary().to_string(float_format="{:,.2f}".format))
 
-    lines.append(_heading("🏷️ Spending per category"))
+    lines.append(_heading("Spending per category"))
     for category, amount in account.spending_by_category().items():
         lines.append(f"{category:<16} {amount:>12,.2f} €")
 
-    lines.append(_heading("🔁 Recurring payments"))
+    lines.append(_heading("Recurring payments"))
     recurring = find_recurring(account)
     if recurring:
         lines += [str(payment) for payment in recurring]
     else:
         lines.append("None found.")
 
-    lines.append(_heading(f"🔮 Balance forecast ({forecast_months} months)"))
+    lines.append(_heading(f"Balance forecast ({forecast_months} months)"))
     if len(month_end_balances(account)) >= 2:
         for month, value in forecast_balance(account, forecast_months).items():
             lines.append(f"{month}  {value:>12,.2f} €")
     else:
         lines.append("Need at least 2 months of data.")
 
-    lines.append(_heading("💡 Tips"))
+    lines.append(_heading("Tips"))
     lines += get_advice(account)
 
     return "\n".join(lines)

@@ -7,11 +7,11 @@ import matplotlib
 # "Agg" draws straight into files, so no window is needed (works on any computer)
 matplotlib.use("Agg")
 
-import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib.ticker import StrMethodFormatter  # noqa: E402
+import matplotlib.pyplot as plt
+from matplotlib.ticker import StrMethodFormatter
 
-from finance_analyzer.account import Account  # noqa: E402
-from finance_analyzer.forecast import forecast_balance, month_end_balances  # noqa: E402
+from finance_analyzer.account import Account
+from finance_analyzer.forecast import forecast_balance, month_end_balances
 
 # Colors (one place, so every chart looks the same)
 BLUE = "#2a78d6"
@@ -57,17 +57,35 @@ def plot_monthly(account: Account, path: Path) -> Path:
     gap = {"edgecolor": SURFACE, "linewidth": 1.5}
 
     fig, ax = plt.subplots(figsize=(10, 5), facecolor=SURFACE)
-    ax.bar([i - width / 2 for i in x], summary["income"], width,
-           color=BLUE, label="Income", **gap)
-    ax.bar([i + width / 2 for i in x], -summary["expenses"], width,
-           color=ORANGE, label="Expenses", **gap)
+    ax.bar(
+        [i - width / 2 for i in x],
+        summary["income"],
+        width,
+        color=BLUE,
+        label="Income",
+        **gap,
+    )
+    ax.bar(
+        [i + width / 2 for i in x],
+        -summary["expenses"],
+        width,
+        color=ORANGE,
+        label="Expenses",
+        **gap,
+    )
     ax.set_xticks(list(x), months, rotation=45, ha="right")
     _style(ax, "Income vs. expenses per month", "€")
     # Put the legend above the chart so it never covers the bars
-    ax.legend(frameon=False, labelcolor=TEXT_SECONDARY, ncols=2,
-              loc="lower left", bbox_to_anchor=(0, 1.0))
-    ax.set_title("Income vs. expenses per month", loc="left", fontsize=14,
-                 color=TEXT, pad=30)
+    ax.legend(
+        frameon=False,
+        labelcolor=TEXT_SECONDARY,
+        ncols=2,
+        loc="lower left",
+        bbox_to_anchor=(0, 1.0),
+    )
+    ax.set_title(
+        "Income vs. expenses per month", loc="left", fontsize=14, color=TEXT, pad=30
+    )
     return _save(fig, path)
 
 
@@ -77,8 +95,13 @@ def plot_categories(account: Account, path: Path) -> Path:
 
     fig, ax = plt.subplots(figsize=(9, 5), facecolor=SURFACE)
     bars = ax.barh(spending.index, spending.to_numpy(), color=BLUE, height=0.6)
-    ax.bar_label(bars, labels=[f"{v:,.0f} €" for v in spending], padding=4,
-                 color=TEXT_SECONDARY, fontsize=10)
+    ax.bar_label(
+        bars,
+        labels=[f"{v:,.0f} €" for v in spending],
+        padding=4,
+        color=TEXT_SECONDARY,
+        fontsize=10,
+    )
     _style(ax, "Spending per category")
     ax.grid(axis="y", visible=False)
     ax.grid(axis="x", color=GRID, linewidth=0.8)
@@ -101,15 +124,37 @@ def plot_forecast(account: Account, path: Path, months: int = 6) -> Path:
     forecast_y = [history.iloc[-1], *future.to_numpy()]
 
     fig, ax = plt.subplots(figsize=(10, 5), facecolor=SURFACE)
-    ax.plot([str(m) for m in history.index], history.to_numpy(),
-            color=BLUE, linewidth=2, marker="o", markersize=5, label="Balance")
+    ax.plot(
+        [str(m) for m in history.index],
+        history.to_numpy(),
+        color=BLUE,
+        linewidth=2,
+        marker="o",
+        markersize=5,
+        label="Balance",
+    )
     # Dashed line from the last real point, hollow markers only on predicted months
-    ax.plot(forecast_x, forecast_y, color=BLUE, linewidth=2, linestyle="--",
-            marker="o", markersize=5, markerfacecolor=SURFACE, markevery=slice(1, None),
-            label="Forecast")
-    ax.annotate(f"{future.iloc[-1]:,.0f} €", (forecast_x[-1], forecast_y[-1]),
-                textcoords="offset points", xytext=(0, 10), ha="center",
-                color=TEXT_SECONDARY, fontsize=10)
+    ax.plot(
+        forecast_x,
+        forecast_y,
+        color=BLUE,
+        linewidth=2,
+        linestyle="--",
+        marker="o",
+        markersize=5,
+        markerfacecolor=SURFACE,
+        markevery=slice(1, None),
+        label="Forecast",
+    )
+    ax.annotate(
+        f"{future.iloc[-1]:,.0f} €",
+        (forecast_x[-1], forecast_y[-1]),
+        textcoords="offset points",
+        xytext=(0, 10),
+        ha="center",
+        color=TEXT_SECONDARY,
+        fontsize=10,
+    )
     ax.tick_params(axis="x", rotation=45)
     _style(ax, f"Month-end balance and {months}-month forecast", "€")
     ax.legend(frameon=False, labelcolor=TEXT_SECONDARY, loc="upper left")

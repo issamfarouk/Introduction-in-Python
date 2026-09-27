@@ -3,6 +3,8 @@ name = "finance-analyzer"
 version = "0.1.0"
 description = "Analyze bank transactions, detect recurring payments, and forecast your balance"
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [
     { name = "Mohamed Gomaa", email = "mohamed.gomaa@tu-dortmund.de" }
 ]

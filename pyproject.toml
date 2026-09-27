@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Analyze bank transactions, detect recurring payments, and forecast your balance"
 readme = "README.md"
 authors = [
-    { name = "issamfarouk", email = "mohamedessameldinfarouk@gmail.com" }
+    { name = "Mohamed Gomaa", email = "mohamed.gomaa@tu-dortmund.de" }
 ]
 requires-python = ">=3.12"
 dependencies = [

@@ -175,5 +175,7 @@ uv run ruff format src
 
 ## Author
 
-Mohamed Essameldin ([@issamfarouk](https://github.com/issamfarouk)), final project for the
-course *Introduction to Python* at TU Dortmund.
+**Mohamed Gomaa** ([@issamfarouk](https://github.com/issamfarouk))<br>
+mohamed.gomaa@tu-dortmund.de
+
+Final project for the course *Introduction in Python* at TU Dortmund.

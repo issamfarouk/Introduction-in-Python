@@ -1,0 +1,14 @@
+[project]
+name = "finance-analyzer"
+version = "0.1.0"
+description = "Analyze bank transactions, detect recurring payments, and forecast your balance"
+readme = "README.md"
+authors = [
+    { name = "issamfarouk", email = "mohamedessameldinfarouk@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[build-system]
+requires = ["uv_build>=0.12.19,<0.13.0"]
+build-backend = "uv_build"

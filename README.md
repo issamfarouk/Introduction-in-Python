@@ -44,6 +44,12 @@ Show all commands:
 uv run -m finance_analyzer --help
 ```
 
+The package also installs a `finance-analyzer` command, so this works too:
+
+```bash
+uv run finance-analyzer --help
+```
+
 ### Analyze a bank statement
 
 ```bash

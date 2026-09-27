@@ -15,6 +15,9 @@ dependencies = [
     "pandas>=3.0.6,<4",
 ]
 
+[project.scripts]
+finance-analyzer = "finance_analyzer.__main__:main"
+
 [project.urls]
 Homepage = "https://github.com/issamfarouk/finance-analyzer"
 Issues = "https://github.com/issamfarouk/finance-analyzer/issues"

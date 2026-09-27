@@ -79,10 +79,3 @@ def save_to_csv(transactions: list[Transaction], path: Path) -> None:
         writer.writerow(["Date", "Description", "Amount"])
         for t in transactions:
             writer.writerow([t.date.isoformat(), t.description, f"{t.amount:.2f}"])
-
-
-if __name__ == "__main__":
-    output = Path("data/sample_transactions.csv")
-    transactions = generate_transactions()
-    save_to_csv(transactions, output)
-    print(f"Saved {len(transactions)} transactions to {output}")

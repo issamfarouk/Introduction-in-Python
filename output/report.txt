@@ -1,0 +1,63 @@
+💰 Finance report: sample_transactions.csv
+========================================
+Transactions:     379 (2025-10-01 to 2026-09-30)
+Starting balance: 1,000.00 €
+Total income:     25,200.00 €
+Total expenses:   -19,897.15 €
+Final balance:    6,302.85 €
+
+📅 Monthly summary
+-----------------
+          income  expenses    net
+month                            
+2025-10 2,100.00 -1,584.59 515.41
+2025-11 2,100.00 -1,516.88 583.12
+2025-12 2,100.00 -1,838.24 261.76
+2026-01 2,100.00 -1,645.89 454.11
+2026-02 2,100.00 -1,632.99 467.01
+2026-03 2,100.00 -1,856.36 243.64
+2026-04 2,100.00 -1,853.69 246.31
+2026-05 2,100.00 -1,639.39 460.61
+2026-06 2,100.00 -1,268.24 831.76
+2026-07 2,100.00 -1,671.89 428.11
+2026-08 2,100.00 -1,722.97 377.03
+2026-09 2,100.00 -1,666.02 433.98
+
+🏷️ Spending per category
+------------------------
+Housing              9,000.00 €
+Groceries            4,131.66 €
+Shopping             3,002.30 €
+Eating out           1,376.89 €
+Health & Care          862.78 €
+Subscriptions          827.52 €
+Transport              696.00 €
+
+🔁 Recurring payments
+--------------------
+Rent                   -750.00 € monthly  (around day  1,  -9,000.00 € per year)
+Deutschlandticket       -58.00 € monthly  (around day  3,    -696.00 € per year)
+FitX Gym                -24.99 € monthly  (around day  5,    -299.88 € per year)
+Vodafone Mobile         -19.99 € monthly  (around day 10,    -239.88 € per year)
+Netflix                 -12.99 € monthly  (around day  1,    -155.88 € per year)
+Spotify                 -10.99 € monthly  (around day 15,    -131.88 € per year)
+Salary                2,100.00 € monthly  (around day 25,  25,200.00 € per year)
+
+🔮 Balance forecast (6 months)
+-----------------------------
+2026-10      6,652.76 €
+2026-11      7,082.34 €
+2026-12      7,511.92 €
+2027-01      7,941.50 €
+2027-02      8,371.08 €
+2027-03      8,800.67 €
+
+💡 Tips
+------
+✅ Great job! You save 21% of your income.
+🏠 Housing takes 36% of your income (recommended: under 30%).
+🔁 You have 5 recurring payments (Deutschlandticket, FitX Gym, Vodafone Mobile, Netflix, Spotify) costing 1,523.52 € per year. Cancel the ones you don't use.
+🛍️ You spend 250.19 € per month on Shopping. Cutting it by a quarter would save 750.58 € per year.
+🔎 2026-03 was your weakest month: you saved only 243.64 €. Check what happened there.
+🛟 Your balance covers 3.8 months of expenses. Nice safety net!
+🔮 Your balance grows by 429.58 € per month. In 6 months you could have 8,800.67 €.

@@ -1,0 +1,33 @@
+💰 Finance report: example_german_bank.csv
+========================================
+Transactions:     4 (2025-10-01 to 2025-10-25)
+Starting balance: 0.00 €
+Total income:     2,100.00 €
+Total expenses:   -806.16 €
+Final balance:    1,293.84 €
+
+📅 Monthly summary
+-----------------
+          income  expenses      net
+month                              
+2025-10 2,100.00   -806.16 1,293.84
+
+🏷️ Spending per category
+------------------------
+Housing                750.00 €
+Groceries               43.17 €
+Subscriptions           12.99 €
+
+🔁 Recurring payments
+--------------------
+None found.
+
+🔮 Balance forecast (6 months)
+-----------------------------
+Need at least 2 months of data.
+
+💡 Tips
+------
+✅ Great job! You save 62% of your income.
+🏠 Housing takes 36% of your income (recommended: under 30%).
+🛟 Your balance covers only 1.6 months of expenses. Aim for at least 3 months.

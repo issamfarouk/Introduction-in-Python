@@ -43,8 +43,8 @@ class RecurringPayment:
 
     def __str__(self) -> str:
         return (
-            f"{self.description:<20} {self.amount:>9.2f} € {self.interval:<8} "
-            f"(around day {self.day_of_month:>2}, {self.yearly_amount:>9.2f} € per year)"
+            f"{self.description:<20} {self.amount:>9,.2f} € {self.interval:<8} "
+            f"(around day {self.day_of_month:>2}, {self.yearly_amount:>10,.2f} € per year)"
         )
 
 

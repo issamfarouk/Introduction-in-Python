@@ -18,28 +18,52 @@ class StatementError(Exception):
 
 
 class BankImporter(ABC):
-    """Base class for all importers. Subclasses must implement parse_row."""
+    """Base class for all importers. Subclasses must implement parse_row.
+
+    Rows with a missing date or amount are skipped instead of stopping the
+    whole import. The reason for every skipped row is kept in `self.skipped`.
+    """
 
     delimiter = ","
+    MISSING_DESCRIPTION = "(no description)"
+
+    def __init__(self) -> None:
+        self.skipped: list[str] = []
 
     @abstractmethod
     def parse_row(self, row: dict[str, str]) -> Transaction:
         """Turn one row of the CSV file into a Transaction."""
 
+    @staticmethod
+    def required(row: dict[str, str], column: str) -> str:
+        """Return the value of `column`, or raise ValueError if it is empty."""
+        value = row[column]
+        if not value:
+            raise ValueError(f"missing {column}")
+        return value
+
     def load(self, path: str | Path) -> list[Transaction]:
         """Read every row of the file and return the transactions sorted by date."""
         path = Path(path)
+        self.skipped = []
         transactions = []
-        with open(path, newline="", encoding="utf-8") as file:
+        # "utf-8-sig" also reads files saved by Excel, which start with a hidden character
+        with open(path, newline="", encoding="utf-8-sig") as file:
             reader = csv.DictReader(file, delimiter=self.delimiter)
-            # Line 1 is the header, so the first data row is line 2
-            for line_number, row in enumerate(reader, start=2):
+            for row in reader:
+                # Remove extra spaces; missing columns become empty strings
+                row = {key: (value or "").strip() for key, value in row.items() if key}
+                if not any(row.values()):
+                    continue
                 try:
                     transactions.append(self.parse_row(row))
                 except (KeyError, ValueError) as error:
-                    raise StatementError(
-                        f"{path.name}, line {line_number}: {error}"
-                    ) from error
+                    self.skipped.append(f"line {reader.line_num}: {error}")
+
+        if not transactions and self.skipped:
+            raise StatementError(
+                f"{path.name}: no valid transactions ({self.skipped[0]})"
+            )
         return sorted(transactions)
 
 
@@ -48,9 +72,9 @@ class GenericCsvImporter(BankImporter):
 
     def parse_row(self, row: dict[str, str]) -> Transaction:
         return Transaction(
-            date.fromisoformat(row["Date"]),
-            row["Description"],
-            float(row["Amount"]),
+            date.fromisoformat(self.required(row, "Date")),
+            row["Description"] or self.MISSING_DESCRIPTION,
+            float(self.required(row, "Amount")),
         )
 
 
@@ -60,12 +84,12 @@ class GermanBankImporter(BankImporter):
     delimiter = ";"
 
     def parse_row(self, row: dict[str, str]) -> Transaction:
-        day, month, year = row["Buchungstag"].split(".")
+        day, month, year = self.required(row, "Buchungstag").split(".")
         # German numbers: "." separates thousands, "," is the decimal point
-        amount = row["Betrag"].replace(".", "").replace(",", ".")
+        amount = self.required(row, "Betrag").replace(".", "").replace(",", ".")
         return Transaction(
             date(int(year), int(month), int(day)),
-            row["Verwendungszweck"],
+            row["Verwendungszweck"] or self.MISSING_DESCRIPTION,
             float(amount),
         )
 
@@ -76,7 +100,7 @@ def detect_importer(path: str | Path) -> BankImporter:
     if not path.exists():
         raise FileNotFoundError(f"No such file: {path}")
 
-    with open(path, encoding="utf-8") as file:
+    with open(path, encoding="utf-8-sig") as file:
         header = file.readline()
 
     if "Buchungstag" in header:

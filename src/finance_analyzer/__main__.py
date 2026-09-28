@@ -26,7 +26,7 @@ def run_report(args: argparse.Namespace) -> None:
     print("\nSaved files:")
     print(f"   {report_path}")
     if len(account) > 0 and len(account.monthly_summary()) >= 2:
-        for path in save_all_plots(account, args.output):
+        for path in save_all_plots(account, args.output, args.months):
             print(f"   {path}")
 
 

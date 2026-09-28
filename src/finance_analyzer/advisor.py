@@ -126,15 +126,11 @@ RULES = [
     flexible_spending_tip,
     worst_month_tip,
     emergency_fund_tip,
-    forecast_tip,
 ]
 
 
-def get_advice(account: Account) -> list[str]:
+def get_advice(account: Account, forecast_months: int = 6) -> list[str]:
     """Run every rule and collect the tips that have something to say."""
-    tips = []
-    for rule in RULES:
-        tip = rule(account)
-        if tip is not None:
-            tips.append(tip)
-    return tips
+    tips = [rule(account) for rule in RULES]
+    tips.append(forecast_tip(account, forecast_months))
+    return [tip for tip in tips if tip is not None]

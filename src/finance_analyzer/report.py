@@ -59,6 +59,6 @@ def build_report(
         lines.append("Need at least 2 months of data.")
 
     lines.append(_heading("Tips"))
-    lines += get_advice(account)
+    lines += get_advice(account, forecast_months)
 
     return "\n".join(lines)

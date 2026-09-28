@@ -161,11 +161,13 @@ def plot_forecast(account: Account, path: Path, months: int = 6) -> Path:
     return _save(fig, path)
 
 
-def save_all_plots(account: Account, folder: str | Path = "output") -> list[Path]:
+def save_all_plots(
+    account: Account, folder: str | Path = "output", forecast_months: int = 6
+) -> list[Path]:
     """Draw every chart into `folder` and return the file paths."""
     folder = Path(folder)
     return [
         plot_monthly(account, folder / "monthly_income_expenses.png"),
         plot_categories(account, folder / "spending_by_category.png"),
-        plot_forecast(account, folder / "balance_forecast.png"),
+        plot_forecast(account, folder / "balance_forecast.png", forecast_months),
     ]

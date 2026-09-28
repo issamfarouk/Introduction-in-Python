@@ -33,6 +33,10 @@ def build_report(
         f"Final balance:    {_euro(account.balance)}",
     ]
 
+    if account.skipped_rows:
+        lines.append(_heading(f"Skipped rows ({len(account.skipped_rows)})"))
+        lines += account.skipped_rows
+
     lines.append(_heading("Monthly summary"))
     lines.append(account.monthly_summary().to_string(float_format="{:,.2f}".format))
 

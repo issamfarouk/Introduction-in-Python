@@ -5,7 +5,7 @@ from pathlib import Path
 import pandas as pd
 
 from finance_analyzer.categorizer import categorize_all
-from finance_analyzer.importers import load_transactions
+from finance_analyzer.importers import detect_importer
 from finance_analyzer.transaction import Transaction
 
 
@@ -19,12 +19,17 @@ class Account:
     ) -> None:
         self.transactions = sorted(transactions)
         self.starting_balance = starting_balance
+        # Rows of the source file that could not be read (filled by from_csv)
+        self.skipped_rows: list[str] = []
         categorize_all(self.transactions)
 
     @classmethod
     def from_csv(cls, path: str | Path, starting_balance: float = 0.0) -> "Account":
         """Create an account directly from a bank statement file."""
-        return cls(load_transactions(path), starting_balance)
+        importer = detect_importer(path)
+        account = cls(importer.load(path), starting_balance)
+        account.skipped_rows = importer.skipped
+        return account
 
     @property
     def total_income(self) -> float:

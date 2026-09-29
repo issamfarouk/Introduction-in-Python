@@ -47,7 +47,7 @@ class BankImporter(ABC):
         path = Path(path)
         self.skipped = []
         transactions = []
-        # "utf-8-sig" also reads files saved by Excel, which start with a hidden character
+        # "utf-8-sig" also reads CSV files saved by Excel
         with open(path, newline="", encoding="utf-8-sig") as file:
             reader = csv.DictReader(file, delimiter=self.delimiter)
             for row in reader:
@@ -68,7 +68,7 @@ class BankImporter(ABC):
 
 
 class GenericCsvImporter(BankImporter):
-    """Format: Date,Description,Amount  e.g.  2025-10-01,Rent,-750.00"""
+    """Simple format, for example: 2025-10-01,Rent,-750.00"""
 
     def parse_row(self, row: dict[str, str]) -> Transaction:
         return Transaction(
@@ -79,7 +79,7 @@ class GenericCsvImporter(BankImporter):
 
 
 class GermanBankImporter(BankImporter):
-    """Format used by German banks:  01.10.2025;Miete;-1.234,56"""
+    """German format, for example: 01.10.2025;Miete;-1.234,56"""
 
     delimiter = ";"
 

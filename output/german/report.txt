@@ -18,8 +18,8 @@ Housing                750.00 €
 Groceries               43.17 €
 Subscriptions           12.99 €
 
-Recurring payments
-------------------
+Recurring transactions
+----------------------
 None found.
 
 Balance forecast (6 months)

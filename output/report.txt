@@ -33,8 +33,8 @@ Health & Care          862.78 €
 Subscriptions          827.52 €
 Transport              696.00 €
 
-Recurring payments
-------------------
+Recurring transactions
+----------------------
 Rent                   -750.00 € monthly  (around day  1,  -9,000.00 € per year)
 Deutschlandticket       -58.00 € monthly  (around day  3,    -696.00 € per year)
 FitX Gym                -24.99 € monthly  (around day  5,    -299.88 € per year)

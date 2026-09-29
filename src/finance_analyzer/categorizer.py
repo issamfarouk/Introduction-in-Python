@@ -32,7 +32,7 @@ def categorize(description: str, amount: float) -> str:
     """
     words = description.lower().split()
     for category, keywords in CATEGORY_KEYWORDS.items():
-        # Money going out is never income ("Lohnsteuer" is a tax payment)
+        # Money going out can't be income
         if category == "Income" and amount <= 0:
             continue
         for keyword in keywords:

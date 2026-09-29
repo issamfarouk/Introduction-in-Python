@@ -44,7 +44,7 @@ def build_report(
     for category, amount in account.spending_by_category().items():
         lines.append(f"{category:<16} {amount:>12,.2f} €")
 
-    lines.append(_heading("Recurring payments"))
+    lines.append(_heading("Recurring transactions"))
     recurring = find_recurring(account)
     if recurring:
         lines += [str(payment) for payment in recurring]

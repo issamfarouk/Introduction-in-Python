@@ -4,7 +4,7 @@ from pathlib import Path
 
 import matplotlib
 
-# "Agg" draws straight into files, so no window is needed (works on any computer)
+# "Agg" saves charts to files without opening a window
 matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt

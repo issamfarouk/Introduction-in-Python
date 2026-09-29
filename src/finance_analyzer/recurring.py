@@ -5,6 +5,8 @@ import numpy as np
 from finance_analyzer.account import Account
 
 # Name -> (shortest gap in days, longest gap in days, times per year)
+# The ranges leave some room, because months have 28 to 31 days and
+# payments are sometimes a day or two early or late.
 INTERVALS = {
     "weekly": (6, 8, 52),
     "monthly": (26, 35, 12),
@@ -49,7 +51,7 @@ class RecurringPayment:
 
 
 def interval_name(days: float) -> str | None:
-    """Turn an average gap in days into 'weekly', 'monthly', ... or None."""
+    """Turn a gap in days into 'weekly', 'monthly', 'yearly', or None."""
     for name, (shortest, longest, _) in INTERVALS.items():
         if shortest <= days <= longest:
             return name

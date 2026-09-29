@@ -5,6 +5,7 @@ Every rule is a small function that looks at one thing. It returns a tip
 """
 
 from finance_analyzer.account import Account
+from finance_analyzer.categorizer import categorize
 from finance_analyzer.forecast import fit_trend, forecast_balance, month_end_balances
 from finance_analyzer.recurring import find_recurring
 
@@ -48,7 +49,8 @@ def subscriptions_tip(account: Account) -> str | None:
     subscriptions = [
         payment
         for payment in find_recurring(account)
-        if payment.amount < 0 and payment.description.lower() not in ("rent", "miete")
+        if payment.amount < 0
+        and categorize(payment.description, payment.amount) != "Housing"
     ]
     if not subscriptions:
         return None
@@ -68,7 +70,7 @@ def flexible_spending_tip(account: Account) -> str | None:
         return None
     category = max(flexible, key=flexible.get)
     per_month = flexible[category] / months
-    saving = flexible[category] / months * 12 * 0.25
+    saving = per_month * 12 / 4
     return (
         f"[Tip]     You spend {per_month:,.2f} € per month on {category}. "
         f"Cutting it by a quarter would save {saving:,.2f} € per year."

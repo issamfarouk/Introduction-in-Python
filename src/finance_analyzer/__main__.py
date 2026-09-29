@@ -53,7 +53,10 @@ def build_parser() -> argparse.ArgumentParser:
         help="account balance before the first transaction (default: 0)",
     )
     report.add_argument(
-        "--months", type=int, default=6, help="how many months to forecast (default: 6)"
+        "--months",
+        type=int,
+        default=6,
+        help="how many months to forecast (default: 6)",
     )
     report.add_argument(
         "--output",
@@ -73,7 +76,10 @@ def build_parser() -> argparse.ArgumentParser:
         help="where to save the file (default: data/sample_transactions.csv)",
     )
     generate.add_argument(
-        "--months", type=int, default=12, help="how many months of data (default: 12)"
+        "--months",
+        type=int,
+        default=12,
+        help="how many months of data (default: 12)",
     )
     generate.add_argument(
         "--seed",
@@ -88,6 +94,9 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main() -> None:
     args = build_parser().parse_args()
+    if args.months < 1:
+        print("Error: --months must be 1 or more", file=sys.stderr)
+        sys.exit(1)
     try:
         args.func(args)
     except (FileNotFoundError, StatementError) as error:

@@ -99,6 +99,8 @@ def detect_importer(path: str | Path) -> BankImporter:
     path = Path(path)
     if not path.exists():
         raise FileNotFoundError(f"No such file: {path}")
+    if not path.is_file():
+        raise StatementError(f"{path} is a folder, not a CSV file")
 
     with open(path, encoding="utf-8-sig") as file:
         header = file.readline()

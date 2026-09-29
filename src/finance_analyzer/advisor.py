@@ -82,9 +82,15 @@ def worst_month_tip(account: Account) -> str | None:
     if len(summary) < 2:
         return None
     worst = summary["net"].idxmin()
+    net = summary.loc[worst, "net"]
+    if net < 0:
+        return (
+            f"[Warning] In {worst} you spent {-net:,.2f} € more than you earned. "
+            f"Check what happened there."
+        )
     return (
         f"[Info]    {worst} was your weakest month: you saved only "
-        f"{summary.loc[worst, 'net']:,.2f} €. Check what happened there."
+        f"{net:,.2f} €. Check what happened there."
     )
 
 
@@ -95,6 +101,11 @@ def emergency_fund_tip(account: Account) -> str | None:
     monthly_expenses = -account.total_expenses / months
     if monthly_expenses == 0:
         return None
+    if account.balance <= 0:
+        return (
+            f"[Warning] Your balance is {account.balance:,.2f} €. "
+            f"Try to save at least {EMERGENCY_MONTHS} months of expenses."
+        )
     covered = account.balance / monthly_expenses
     if covered < EMERGENCY_MONTHS:
         return (

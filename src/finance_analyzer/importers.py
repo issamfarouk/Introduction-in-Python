@@ -85,6 +85,9 @@ class GermanBankImporter(BankImporter):
 
     def parse_row(self, row: dict[str, str]) -> Transaction:
         day, month, year = self.required(row, "Buchungstag").split(".")
+        # Some banks write the year with two digits: 01.10.25
+        if len(year) == 2:
+            year = "20" + year
         # German numbers: "." separates thousands, "," is the decimal point
         amount = self.required(row, "Betrag").replace(".", "").replace(",", ".")
         return Transaction(

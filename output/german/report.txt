@@ -8,9 +8,8 @@ Final balance:    1,293.84 €
 
 Monthly summary
 ---------------
-          income  expenses      net
-month                              
-2025-10 2,100.00   -806.16 1,293.84
+Month          Income    Expenses         Net
+2025-10      2,100.00     -806.16    1,293.84
 
 Spending per category
 ---------------------

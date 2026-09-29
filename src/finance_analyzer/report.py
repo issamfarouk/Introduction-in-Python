@@ -38,7 +38,13 @@ def build_report(
         lines += account.skipped_rows
 
     lines.append(_heading("Monthly summary"))
-    lines.append(account.monthly_summary().to_string(float_format="{:,.2f}".format))
+    summary = account.monthly_summary()
+    lines.append(f"{'Month':<9}{'Income':>12}{'Expenses':>12}{'Net':>12}")
+    for month, income, expenses, net in zip(
+        summary.index, summary["income"], summary["expenses"], summary["net"]
+    ):
+        month = str(month)
+        lines.append(f"{month:<9}{income:>12,.2f}{expenses:>12,.2f}{net:>12,.2f}")
 
     lines.append(_heading("Spending per category"))
     for category, amount in account.spending_by_category().items():

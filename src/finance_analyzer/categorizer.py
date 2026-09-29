@@ -17,20 +17,27 @@ CATEGORY_KEYWORDS: dict[str, list[str]] = {
         "vodafone",
         "telekom",
     ],
-    "Transport": ["deutschlandticket", "bahn", "db vertrieb", "uber", "tank"],
+    "Transport": ["deutschlandticket", "bahn", "uber", "tank"],
     "Shopping": ["amazon", "zalando", "ikea", "mediamarkt"],
-    "Health & Care": ["dm drogerie", "rossmann", "apotheke"],
+    "Health & Care": ["drogerie", "rossmann", "apotheke"],
 }
 
 UNCATEGORIZED = "Uncategorized"
 
 
 def categorize(description: str, amount: float) -> str:
-    """Return the category for one transaction."""
-    text = description.lower()
+    """Return the category for one transaction.
+
+    Keywords only match at the start of a word, not in the middle of one.
+    """
+    words = description.lower().split()
     for category, keywords in CATEGORY_KEYWORDS.items():
-        if any(keyword in text for keyword in keywords):
-            return category
+        # Money going out is never income ("Lohnsteuer" is a tax payment)
+        if category == "Income" and amount <= 0:
+            continue
+        for keyword in keywords:
+            if any(word.startswith(keyword) for word in words):
+                return category
 
     # No keyword matched: at least tell money in from money out
     match amount:

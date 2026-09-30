@@ -10,6 +10,7 @@ import csv
 from datetime import date
 from pathlib import Path
 
+from finance_analyzer.categorizer import categorize
 from finance_analyzer.transaction import Transaction
 
 # Words that show what a column holds (lowercase, English and German).
@@ -229,9 +230,10 @@ class CsvImporter:
 
 
 class RevolutImporter(CsvImporter):
-    """Revolut statements also have a State and a Fee column.
+    """Revolut statements also have a State, a Fee and a Type column.
 
     Cancelled payments are skipped and the fee is subtracted from the amount.
+    A transfer that no keyword recognizes is put in the "Transfers" category.
     """
 
     def parse_row(self, row: dict[str, str]) -> Transaction:
@@ -239,6 +241,10 @@ class RevolutImporter(CsvImporter):
             raise ValueError(f"payment not completed ({row['State']})")
         transaction = super().parse_row(row)
         transaction.amount -= parse_amount(row["Fee"] or "0")
+
+        category = categorize(transaction.description, transaction.amount)
+        if row["Type"] == "Transfer" and category in ("Other", "Other income"):
+            transaction.category = "Transfers"
         return transaction
 
 
@@ -258,7 +264,7 @@ def detect_importer(
     with open(path, encoding="utf-8-sig") as file:
         columns = file.readline().strip().split(",")
 
-    if "State" in columns and "Fee" in columns and "Completed Date" in columns:
+    if "State" in columns and "Fee" in columns and "Type" in columns:
         return RevolutImporter(date_column, description_column, amount_column)
     return CsvImporter(date_column, description_column, amount_column)
 

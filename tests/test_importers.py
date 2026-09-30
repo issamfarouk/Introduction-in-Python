@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 
+from finance_analyzer import Account
 from finance_analyzer.importers import (
     CsvImporter,
     RevolutImporter,
@@ -62,6 +63,19 @@ def test_load_revolut_file():
     assert importer.skipped == ["line 4: payment not completed (REVERTED)"]
     # 600.00 after a top-up of 500.00 means the account started with 100.00
     assert importer.starting_balance == 100.0
+
+
+def test_revolut_transfer_without_a_known_keyword(tmp_path):
+    file = tmp_path / "revolut.csv"
+    file.write_text(
+        "Type,Product,Started Date,Completed Date,Description,Amount,Fee,Currency,State,Balance\n"
+        "Transfer,Current,2025-10-01 08:00:00,2025-10-01 08:00:03,To Some Company,-30.00,0.00,EUR,COMPLETED,70.00\n"
+        "Card Payment,Current,2025-10-02 08:00:00,2025-10-02 08:00:03,Some Shop,-10.00,0.00,EUR,COMPLETED,60.00\n"
+    )
+    transfer, card_payment = Account.from_csv(file).transactions
+
+    assert transfer.category == "Transfers"
+    assert card_payment.category == "Other"
 
 
 def test_quoted_columns_with_longer_names(tmp_path):

@@ -15,6 +15,7 @@ from finance_analyzer.report import build_report
 
 
 def run_report(args: argparse.Namespace) -> None:
+    """Run the `report` command: print the report and save it with the charts."""
     account = Account.from_csv(
         args.file,
         starting_balance=args.balance,
@@ -37,12 +38,14 @@ def run_report(args: argparse.Namespace) -> None:
 
 
 def run_generate(args: argparse.Namespace) -> None:
+    """Run the `generate` command: save fake transactions to a CSV file."""
     transactions = generate_transactions(months=args.months, seed=args.seed)
     save_to_csv(transactions, args.output)
     print(f"Saved {len(transactions)} transactions to {args.output}")
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Describe the commands and their options."""
     parser = argparse.ArgumentParser(
         prog="finance_analyzer",
         description="Analyze bank transactions, find recurring payments, "
@@ -105,6 +108,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> None:
+    """Run the command that was typed in the terminal."""
     args = build_parser().parse_args()
     if args.months < 1:
         print("Error: --months must be 1 or more", file=sys.stderr)

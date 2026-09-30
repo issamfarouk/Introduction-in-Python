@@ -48,10 +48,12 @@ class Account:
 
     @property
     def total_income(self) -> float:
+        """All money that came in."""
         return sum(t.amount for t in self.transactions if t.is_income)
 
     @property
     def total_expenses(self) -> float:
+        """All money that went out (a negative number)."""
         return sum(t.amount for t in self.transactions if t.is_expense)
 
     @property

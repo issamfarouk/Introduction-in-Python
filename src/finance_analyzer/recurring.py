@@ -39,6 +39,7 @@ class RecurringPayment:
 
     @property
     def times_per_year(self) -> int:
+        """How often the payment happens in one year."""
         return INTERVALS[self.interval][2]
 
     @property

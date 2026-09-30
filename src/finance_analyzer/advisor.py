@@ -23,6 +23,7 @@ REQUIRED_CATEGORIES = ["Housing", "Insurance", "Fees & Taxes", "Transfers"]
 
 
 def savings_rate_tip(account: Account) -> str | None:
+    """Tell how much of the income is saved (the goal is at least 20%)."""
     if account.total_income <= 0:
         return None
     rate = (account.total_income + account.total_expenses) / account.total_income
@@ -37,6 +38,7 @@ def savings_rate_tip(account: Account) -> str | None:
 
 
 def housing_tip(account: Account) -> str | None:
+    """Warn if housing costs more than 30% of the income."""
     housing = account.spending_by_category().get("Housing", 0.0)
     if account.total_income <= 0 or housing == 0:
         return None
@@ -50,6 +52,7 @@ def housing_tip(account: Account) -> str | None:
 
 
 def subscriptions_tip(account: Account) -> str | None:
+    """List the recurring payments that could be cancelled."""
     subscriptions = [
         payment
         for payment in find_recurring(account)
@@ -68,6 +71,7 @@ def subscriptions_tip(account: Account) -> str | None:
 
 
 def price_increase_tip(account: Account) -> str | None:
+    """Tell which recurring payments got more expensive."""
     increased = [
         payment
         for payment in find_recurring(account)
@@ -84,6 +88,7 @@ def price_increase_tip(account: Account) -> str | None:
 
 
 def flexible_spending_tip(account: Account) -> str | None:
+    """Show how much spending less on eating out or shopping would save."""
     spending = account.spending_by_category()
     months = len(account.monthly_summary())
     flexible = {c: spending[c] for c in FLEXIBLE_CATEGORIES if c in spending}
@@ -99,6 +104,7 @@ def flexible_spending_tip(account: Account) -> str | None:
 
 
 def worst_month_tip(account: Account) -> str | None:
+    """Point to the month with the lowest savings."""
     summary = account.monthly_summary()
     if len(summary) < 2:
         return None
@@ -116,6 +122,7 @@ def worst_month_tip(account: Account) -> str | None:
 
 
 def emergency_fund_tip(account: Account) -> str | None:
+    """Tell how many months of expenses the balance would cover."""
     months = len(account.monthly_summary())
     if months == 0:
         return None
@@ -137,6 +144,7 @@ def emergency_fund_tip(account: Account) -> str | None:
 
 
 def forecast_tip(account: Account, months: int = 6) -> str | None:
+    """Tell where the balance is going in the next months."""
     history = month_end_balances(account)
     if len(history) < 2:
         return None

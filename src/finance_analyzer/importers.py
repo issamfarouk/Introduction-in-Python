@@ -237,6 +237,7 @@ class RevolutImporter(CsvImporter):
     """
 
     def parse_row(self, row: dict[str, str]) -> Transaction:
+        """Read the row like CsvImporter does, then apply the Revolut rules."""
         if row["State"] != "COMPLETED":
             raise ValueError(f"payment not completed ({row['State']})")
         transaction = super().parse_row(row)

@@ -15,7 +15,13 @@ from finance_analyzer.report import build_report
 
 
 def run_report(args: argparse.Namespace) -> None:
-    account = Account.from_csv(args.file, starting_balance=args.balance)
+    account = Account.from_csv(
+        args.file,
+        starting_balance=args.balance,
+        date_column=args.date_column,
+        description_column=args.description_column,
+        amount_column=args.amount_column,
+    )
     report = build_report(account, name=args.file.name, forecast_months=args.months)
     print(report)
 
@@ -49,8 +55,14 @@ def build_parser() -> argparse.ArgumentParser:
     report.add_argument(
         "--balance",
         type=float,
-        default=0.0,
-        help="account balance before the first transaction (default: 0)",
+        help="account balance before the first transaction "
+        "(default: taken from the file if it has a balance column, otherwise 0)",
+    )
+    # Only needed when the columns of the file cannot be found automatically
+    report.add_argument("--date-column", help="name of the column with the dates")
+    report.add_argument("--amount-column", help="name of the column with the amounts")
+    report.add_argument(
+        "--description-column", help="name of the column with the descriptions"
     )
     report.add_argument(
         "--months",

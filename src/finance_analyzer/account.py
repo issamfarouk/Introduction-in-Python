@@ -24,10 +24,25 @@ class Account:
         categorize_all(self.transactions)
 
     @classmethod
-    def from_csv(cls, path: str | Path, starting_balance: float = 0.0) -> "Account":
-        """Create an account directly from a bank statement file."""
-        importer = detect_importer(path)
-        account = cls(importer.load(path), starting_balance)
+    def from_csv(
+        cls,
+        path: str | Path,
+        starting_balance: float | None = None,
+        date_column: str | None = None,
+        description_column: str | None = None,
+        amount_column: str | None = None,
+    ) -> "Account":
+        """Create an account directly from a bank statement file.
+
+        Without a `starting_balance`, the balance column of the file is used
+        if it has one, and 0 otherwise. The three column names are only
+        needed when the importer cannot find the columns by itself.
+        """
+        importer = detect_importer(path, date_column, description_column, amount_column)
+        transactions = importer.load(path)
+        if starting_balance is None:
+            starting_balance = importer.starting_balance or 0.0
+        account = cls(transactions, starting_balance)
         account.skipped_rows = importer.skipped
         return account
 

@@ -1,0 +1,5 @@
+Type,Product,Started Date,Completed Date,Description,Amount,Fee,Currency,State,Balance
+Topup,Current,2025-10-01 09:15:02,2025-10-01 09:15:04,Top-up by bank transfer,500.00,0.00,EUR,COMPLETED,600.00
+Card Payment,Current,2025-10-02 18:40:11,2025-10-03 02:10:45,Lidl,-23.45,0.00,EUR,COMPLETED,576.55
+Card Payment,Current,2025-10-04 12:05:33,,Amazon,-59.99,0.00,EUR,REVERTED,
+Transfer,Current,2025-10-05 08:00:00,2025-10-05 08:00:03,Transfer to a friend,-40.00,0.50,EUR,COMPLETED,536.05

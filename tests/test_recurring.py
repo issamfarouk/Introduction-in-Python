@@ -21,6 +21,17 @@ def test_finds_the_monthly_payments_in_the_sample():
     }
 
 
+def test_price_increase_in_the_sample():
+    account = Account.from_csv(DATA / "sample_transactions.csv")
+    payments = {payment.description: payment for payment in find_recurring(account)}
+    netflix = payments["Netflix"]
+
+    assert netflix.first_amount == -12.99
+    assert netflix.amount == -13.99
+    assert round(netflix.yearly_increase, 2) == 12.0
+    assert payments["Spotify"].yearly_increase == 0
+
+
 def test_weekly_payment():
     start = date(2025, 10, 6)
     account = Account(

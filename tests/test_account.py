@@ -44,5 +44,5 @@ def test_sample_file():
     account = Account.from_csv(DATA / "sample_transactions.csv", starting_balance=1000)
 
     assert len(account) == 379
-    assert account.balance == pytest.approx(6302.85)
+    assert account.balance == pytest.approx(6296.85)
     assert account.skipped_rows == []

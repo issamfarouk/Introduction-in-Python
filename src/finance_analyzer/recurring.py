@@ -15,7 +15,11 @@ INTERVALS = {
 
 
 class RecurringPayment:
-    """A payment that happens again and again with (almost) the same amount."""
+    """A payment that happens again and again with (almost) the same amount.
+
+    `amount` is the latest amount and `first_amount` the amount of the first
+    payment. They are different when the price changed over time.
+    """
 
     def __init__(
         self,
@@ -24,18 +28,31 @@ class RecurringPayment:
         interval: str,
         day_of_month: int,
         occurrences: int,
+        first_amount: float | None = None,
     ) -> None:
         self.description = description
         self.amount = amount
         self.interval = interval
         self.day_of_month = day_of_month
         self.occurrences = occurrences
+        self.first_amount = amount if first_amount is None else first_amount
+
+    @property
+    def times_per_year(self) -> int:
+        return INTERVALS[self.interval][2]
 
     @property
     def yearly_amount(self) -> float:
         """How much this payment adds up to over one year."""
-        times_per_year = INTERVALS[self.interval][2]
-        return self.amount * times_per_year
+        return self.amount * self.times_per_year
+
+    @property
+    def yearly_increase(self) -> float:
+        """How much more this payment costs per year than at its first price.
+
+        Positive when the price went up, 0 when it stayed the same.
+        """
+        return (self.first_amount - self.amount) * self.times_per_year
 
     def __repr__(self) -> str:
         return (
@@ -61,13 +78,14 @@ def interval_name(days: float) -> str | None:
 def find_recurring(
     account: Account,
     min_occurrences: int = 3,
-    amount_tolerance: float = 0.05,
+    amount_tolerance: float = 0.10,
 ) -> list[RecurringPayment]:
     """Find all recurring payments in an account.
 
     A payment counts as recurring when it
     1. happens at least `min_occurrences` times,
-    2. always has about the same amount (within `amount_tolerance`, 5% by default),
+    2. always has about the same amount (within `amount_tolerance` of the
+       average, 10% by default, so a small price change still counts),
     3. happens at regular intervals (weekly, monthly, or yearly).
     """
     df = account.to_dataframe()
@@ -93,10 +111,11 @@ def find_recurring(
         found.append(
             RecurringPayment(
                 description=group["description"].iloc[0],
-                amount=round(float(average), 2),
+                amount=float(amounts[-1]),
                 interval=interval,
                 day_of_month=int(group["date"].dt.day.mode()[0]),
                 occurrences=len(group),
+                first_amount=float(amounts[0]),
             )
         )
 

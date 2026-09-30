@@ -62,6 +62,22 @@ def subscriptions_tip(account: Account) -> str | None:
     )
 
 
+def price_increase_tip(account: Account) -> str | None:
+    increased = [
+        payment
+        for payment in find_recurring(account)
+        if payment.amount < 0 and payment.yearly_increase > 0
+    ]
+    if not increased:
+        return None
+    details = "; ".join(
+        f"{payment.description} went from {-payment.first_amount:,.2f} € "
+        f"to {-payment.amount:,.2f} € ({payment.yearly_increase:,.2f} € more per year)"
+        for payment in increased
+    )
+    return f"[Info]    Price increase: {details}."
+
+
 def flexible_spending_tip(account: Account) -> str | None:
     spending = account.spending_by_category()
     months = len(account.monthly_summary())
@@ -136,6 +152,7 @@ RULES = [
     savings_rate_tip,
     housing_tip,
     subscriptions_tip,
+    price_increase_tip,
     flexible_spending_tip,
     worst_month_tip,
     emergency_fund_tip,

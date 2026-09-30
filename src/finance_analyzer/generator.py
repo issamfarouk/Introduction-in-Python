@@ -19,6 +19,11 @@ MONTHLY_PAYMENTS = [
     (25, "Salary", 2100.00),
 ]
 
+# Subscriptions that get more expensive: description -> (months after start, new amount)
+PRICE_INCREASES = {
+    "Netflix": (6, -13.99),
+}
+
 # Everyday shops: description -> (smallest amount, biggest amount)
 RANDOM_SHOPS = {
     "Lidl": (8, 60),
@@ -57,6 +62,10 @@ def generate_transactions(
         # Fixed monthly payments
         for pay_day, description, amount in MONTHLY_PAYMENTS:
             if day.day == pay_day:
+                if description in PRICE_INCREASES:
+                    months_later, new_amount = PRICE_INCREASES[description]
+                    if day >= add_months(start, months_later):
+                        amount = new_amount
                 transactions.append(Transaction(day, description, amount))
 
         # Random everyday shopping (on average less than one purchase per day)

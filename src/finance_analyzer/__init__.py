@@ -1,7 +1,7 @@
 """finance_analyzer: analyze bank transactions and get saving tips.
 
 Example:
-    >>> from finance_analyzer import Account, find_recurring, get_advice
+    >>> from finance_analyzer import Account, get_advice
     >>> account = Account.from_csv("data/sample_transactions.csv", starting_balance=1000)
     >>> for tip in get_advice(account):
     ...     print(tip)

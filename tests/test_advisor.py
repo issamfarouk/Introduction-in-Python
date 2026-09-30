@@ -36,6 +36,21 @@ def test_price_increase_tip():
     assert "Music went from 9.99 € to 10.99 € (12.00 € more per year)" in tips
 
 
+def test_required_payments_are_not_suggested_for_cancelling():
+    months = [(2025, 10), (2025, 11), (2025, 12)]
+    account = Account(
+        [
+            Transaction(date(y, m, 1), "Techniker Krankenkasse", -146.0)
+            for y, m in months
+        ]
+        + [Transaction(date(y, m, 5), "Spotify", -10.99) for y, m in months]
+    )
+    tips = "\n".join(get_advice(account))
+
+    assert "You have 1 recurring payment (Spotify)" in tips
+    assert "Krankenkasse" not in tips
+
+
 def test_no_price_increase_tip_when_prices_stay_the_same():
     tips = "\n".join(get_advice(losing_account()))
 

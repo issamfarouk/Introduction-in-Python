@@ -17,6 +17,10 @@ EMERGENCY_MONTHS = 3  # keep at least 3 months of expenses as a safety net
 # Categories where it is usually easiest to spend less
 FLEXIBLE_CATEGORIES = ["Eating out", "Shopping"]
 
+# Recurring payments in these categories must be paid, so they are not
+# suggested for cancelling
+REQUIRED_CATEGORIES = ["Housing", "Insurance", "Fees & Taxes", "Transfers"]
+
 
 def savings_rate_tip(account: Account) -> str | None:
     if account.total_income <= 0:
@@ -50,14 +54,15 @@ def subscriptions_tip(account: Account) -> str | None:
         payment
         for payment in find_recurring(account)
         if payment.amount < 0
-        and categorize(payment.description, payment.amount) != "Housing"
+        and categorize(payment.description, payment.amount) not in REQUIRED_CATEGORIES
     ]
     if not subscriptions:
         return None
     yearly = -sum(payment.yearly_amount for payment in subscriptions)
     names = ", ".join(payment.description for payment in subscriptions)
+    word = "payment" if len(subscriptions) == 1 else "payments"
     return (
-        f"[Tip]     You have {len(subscriptions)} recurring payments ({names}) "
+        f"[Tip]     You have {len(subscriptions)} recurring {word} ({names}) "
         f"costing {yearly:,.2f} € per year. Cancel the ones you don't use."
     )
 

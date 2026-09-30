@@ -1,6 +1,6 @@
 [project]
 name = "finance-analyzer"
-version = "0.1.0"
+version = "1.0.0"
 description = "Analyze bank transactions, detect recurring payments, and forecast your balance"
 readme = "README.md"
 license = "MIT"

@@ -33,9 +33,10 @@ cd finance-analyzer
 uv sync
 ```
 
-Alternatively, install it in editable mode into an existing environment:
+Alternatively, create an environment and install the package in editable mode:
 
 ```bash
+uv venv
 uv pip install -e .
 ```
 
